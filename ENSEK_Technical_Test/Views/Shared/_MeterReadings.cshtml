@@ -1,0 +1,83 @@
+﻿@model ENSEK_Technical_Test.Models.MeterReadingsViewModel
+
+<div class="row">
+	<div class="col-12 col-sm-6">
+		@if (Model.SuccessfulMeterReadings != null)
+		{
+			<h5>Successful Meter Readings: @Model.SuccessfulMeterReadingCount</h5>
+
+			if (Model.SuccessfulMeterReadings.Any())
+			{
+				<ul class="p-0">
+					@foreach (var reading in Model.SuccessfulMeterReadings)
+					{
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+							<div class="ms-2 me-auto">
+								<div class="col-12">
+									<span class="item-label">Account: </span> <b>@reading.Account.FullName</b>
+								</div>
+								<div class="col-12">
+									<span class="item-label">Date:</span> @reading.MeterReadingDateTime.ToString("dd/MMMM/yyyy HH:mm")
+								</div>
+								<div class="col-12">
+									<span class="item-label">Meter reading:</span> @reading.MeterReadValue?.ToString("D5")
+								</div>
+							</div>
+						</li>
+					}
+				</ul>
+			}
+		}
+	</div>
+	<div class="col-12 col-sm-6">
+
+		@if (Model.FailedMeterReadings != null)
+		{
+			<h5>Failed Meter Readings: @Model.FailedMeterReadingCount</h5>
+
+			if (Model.FailedMeterReadings.Any())
+			{
+				<ul class="p-0">
+					@foreach (var reading in Model.FailedMeterReadings)
+					{
+						<li class="list-group-item d-flex justify-content-between align-items-start">
+							<div class="ms-2 me-auto">
+								@if (reading.Account != null)
+								{
+									<div class="col-12">
+										<span class="item-label">Account: </span> <b>@reading.Account.FullName</b>
+									</div>
+								}
+								else
+								{
+									<div class="col-12">
+										<span class="item-label">AccountId: </span> <b>@reading.AccountId</b>
+									</div>
+								}
+								<div class="col-12">
+									<span class="item-label">Date:</span> @reading.MeterReadingDateTime.ToString("dd/MMMM/yyyy HH:mm")
+								</div>
+								<div class="col-12">
+									<span class="item-label">Meter reading:</span> @reading.MeterReadValue?.ToString("D5")
+								</div>
+								@if (!string.IsNullOrWhiteSpace(reading.Message))
+								{
+									<div class="col-12 text-danger">
+										<span class="item-label">Failed reason: </span> @reading.Message
+									</div>
+								}
+							</div>
+						</li>
+					}
+				</ul>
+			}
+		}
+	</div>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(Model.Message))
+{
+	<div class="row">
+		@Html.Raw(Model.MessageHtml)
+	</div>
+}
